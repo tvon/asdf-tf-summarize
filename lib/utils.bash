@@ -37,24 +37,25 @@ list_all_versions() {
 }
 
 download_release() {
-  local version filename found url platform arch
+  local version filename found url_prefix platform arch
   version="$1"
   filename="$2" # we will treat this like a prefix
 
   platform=$(getPlatform)
   arch=$(getArch)
 
+  url_prefix="$GH_REPO/releases/download/v${version}/${TOOL_NAME}_${platform}_${arch}"
+
   found=false
   for extension in zip tar.gz ; do
-    url="$GH_REPO/releases/download/v${version}/${TOOL_NAME}_${platform}_${arch}.${extension}"
 
     echo "* Downloading $TOOL_NAME release $version (trying $extension)..."
-    if curl "${curl_opts[@]}" -o "${filename}.${extension}" -C - "$url" ; then
+    if curl "${curl_opts[@]}" -o "${filename}.${extension}" -C - "${url_prefix}.${extension}" ; then
       found=true
       break
     fi
   done
-  $found || fail "Could not download $url"
+  $found || fail "Could not download $url_prefix(.tar.gz|.zip)"
 }
 
 install_version() {
