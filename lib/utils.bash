@@ -37,18 +37,25 @@ list_all_versions() {
 }
 
 download_release() {
-  local version filename url platform arch
+  local version filename found url_prefix platform arch
   version="$1"
-  filename="$2"
+  filename="$2" # we will treat this like a prefix
 
   platform=$(getPlatform)
   arch=$(getArch)
 
-  # TODO: Adapt the release URL convention for tf-summarize
-  url="$GH_REPO/releases/download/v${version}/${TOOL_NAME}_${platform}_${arch}.zip"
+  url_prefix="$GH_REPO/releases/download/v${version}/${TOOL_NAME}_${platform}_${arch}"
 
-  echo "* Downloading $TOOL_NAME release $version..."
-  curl "${curl_opts[@]}" -o "$filename" -C - "$url" || fail "Could not download $url"
+  found=false
+  for extension in zip tar.gz; do
+
+    echo "* Downloading $TOOL_NAME release $version (trying $extension)..."
+    if curl "${curl_opts[@]}" -o "${filename}.${extension}" -C - "${url_prefix}.${extension}"; then
+      found=true
+      break
+    fi
+  done
+  $found || fail "Could not download $url_prefix(.tar.gz|.zip)"
 }
 
 install_version() {
