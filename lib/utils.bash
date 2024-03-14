@@ -47,10 +47,10 @@ download_release() {
   url_prefix="$GH_REPO/releases/download/v${version}/${TOOL_NAME}_${platform}_${arch}"
 
   found=false
-  for extension in zip tar.gz ; do
+  for extension in zip tar.gz; do
 
     echo "* Downloading $TOOL_NAME release $version (trying $extension)..."
-    if curl "${curl_opts[@]}" -o "${filename}.${extension}" -C - "${url_prefix}.${extension}" ; then
+    if curl "${curl_opts[@]}" -o "${filename}.${extension}" -C - "${url_prefix}.${extension}"; then
       found=true
       break
     fi

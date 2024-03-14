@@ -15,7 +15,7 @@ release_file_prefix="$ASDF_DOWNLOAD_PATH/$TOOL_NAME-$ASDF_INSTALL_VERSION"
 download_release "$ASDF_INSTALL_VERSION" "$release_file_prefix"
 
 #  Extract contents of archive file
-if [ -f "${release_file_prefix}.zip" ] ; then
+if [ -f "${release_file_prefix}.zip" ]; then
   unzip -q "${release_file_prefix}.zip" -d "$ASDF_DOWNLOAD_PATH" || fail "Could not extract ${release_file_prefix}.zip"
 else
   tar -xzf "${release_file_prefix}.tar.gz" -C "$ASDF_DOWNLOAD_PATH" || fail "Could not extract ${release_file_prefix}.tar.gz"
